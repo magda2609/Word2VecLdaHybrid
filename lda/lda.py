@@ -11,6 +11,6 @@ def lda(words, topics):
 
     mm = ClippedCorpus(mm_corpus, 4000)
 
-    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=4)
+    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=10, iterations=1000)
 
     return lda.expElogbeta, dictionary
