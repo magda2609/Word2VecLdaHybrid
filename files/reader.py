@@ -3,9 +3,9 @@ from gensim.corpora.wikicorpus import _extract_pages, filter_wiki
 from gensim.corpora import Dictionary
 
 
-def read_files(filename_types):
+def read_files(filenames):
     files = []
-    for fileName in filename_types.getFilenames():
+    for fileName in filenames:
         with open(fileName, 'r') as infile:
             files.append(infile.readlines())
     return files

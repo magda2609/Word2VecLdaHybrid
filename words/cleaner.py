@@ -5,9 +5,15 @@ from nltk.corpus import wordnet
 from gensim.parsing.preprocessing import STOPWORDS
 
 
-def tokenize(files):
+def tokenize(files, logger):
     allWordsConnectedToFiles = []
+    i = 0
+    size = len(files)
     for file in files:
+        if (i % 50 == 1):
+            logger.info("Tokenization - "+str(i)+" over "+ str(size))
+            logger.info("And now there is "+str(allWordsConnectedToFiles.__sizeof__())+" words")
+        i = i+1
         sentences = []
         for line in file:
             lettersOnly = re.sub("[^a-zA-Z]", " ", line)
@@ -25,6 +31,7 @@ def tokenize(files):
                                     sentences2.append(word.lower())
                         except:
                             a=None
+        # if (sentences2.__sizeof__() > 0):
         allWordsConnectedToFiles.append(sentences2)
     return allWordsConnectedToFiles
 

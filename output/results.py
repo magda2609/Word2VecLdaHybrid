@@ -34,11 +34,14 @@ def save_word2vec_topics(extended_topics, w2v_output):
 
 
 def choose_topic(extended_topics, words_in_documents, files_count, topics_count, logger): #files?
-    document_topic = [None] * files_count
+    document_topic_choosen = [None] * files_count
+    document_topic_max = [None] * files_count
     for i in range(0, files_count):
-        document_topic[i] = [None] * topics_count
+        document_topic_choosen[i] = [None] * topics_count
+        document_topic_max[i] = [None] * topics_count
         for j in range(0, topics_count):
-            document_topic[i][j] = 0
+            document_topic_choosen[i][j] = 0
+            document_topic_max[i][j] = 0
 
     i = 0
     for words_in_document in words_in_documents:
@@ -46,17 +49,20 @@ def choose_topic(extended_topics, words_in_documents, files_count, topics_count,
         for word in words_in_document:
             distributions = find_distributions(word, extended_topics, topics_count)
             topic = choose_topic_with_distribution(distributions, topics_count)
-            document_topic[i][topic] += 1
+            document_topic_choosen[i][topic] += 1
+            document_topic_max[i][distributions.index(max(distributions))] += 1
         i += 1
 
-    return document_topic
+    return document_topic_choosen, document_topic_max
 
 
 def choose_topic_with_distribution(distributions, topics_count):
     return numpy.random.choice(numpy.arange(0, topics_count), p=distributions)
 
 def find_distributions(word, extended_topics, topics_count):
-    distributions = [0.000001,0.000001,0.000001,0.000001,0.000001]
+    distributions = []
+    for i in range(0, topics_count):
+        distributions.append(0.000001)
     for i in range(0, topics_count):
         for j in range(0, len(extended_topics[i])):
             if (extended_topics[i][j][2] == word):
@@ -75,6 +81,19 @@ def save_and_calculate_topic_document_distribution(files, doc_topic, output_file
         for j in range(0, topic_count):
             val = float(doc_topic[i][j]) / sum
             values.append(val)
+        values.append(values.index(max(values[1:])))
         data.append(values)
 
-    pyexcel.save_as(array=([['document', 'probabilities']]+data), dest_file_name=output_file)
+    pyexcel.save_as(array=([['document', 'probabilities', 'topic']]+data), dest_file_name=output_file)
+
+def save_lda_document_distributions(all_topics, filenames, output_file):
+    data = []
+    i = 0
+    for doc_topics in all_topics:
+        if (len(doc_topics) > 1):
+            data.append([filenames[i], (max(doc_topics, key=lambda x: x[1])[0])])
+        elif (len(doc_topics) == 1):
+            data.append([filenames[i], doc_topics[0][0]])
+        i = i+1
+
+    pyexcel.save_as(array=([['document', 'topic']]+data), dest_file_name=output_file)

@@ -33,7 +33,7 @@ fileNames = [
     'sherlockHolmesMgmtFetis.txt'
 ]
 
-def getFilenames():
+def getFilenames(isTrain = True):
     castFiles = []
     for fileName in fileNames:
         castFiles.append(where + fileName)

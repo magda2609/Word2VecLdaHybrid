@@ -9,8 +9,20 @@ def lda(words, topics):
     MmCorpus.serialize('documents.mm', corpus)
     mm_corpus = MmCorpus('documents.mm')
 
-    mm = ClippedCorpus(mm_corpus, 4000)
+    mm = ClippedCorpus(mm_corpus)
 
-    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=10, iterations=1000)
+    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=10, iterations=500)
 
-    return lda.expElogbeta, dictionary
+    all_topics = lda.get_document_topics(corpus, per_word_topics=True)
+
+    return lda, all_topics, lda.expElogbeta, dictionary
+
+def lda_test(ldaModel, words):
+    dictionary = Dictionary().load('documents.dict')
+    corpus = [dictionary.doc2bow(text) for text in words]
+
+    all_topics_test = ldaModel.get_document_topics(corpus, per_word_topics=True)
+
+    return all_topics_test
+
+
