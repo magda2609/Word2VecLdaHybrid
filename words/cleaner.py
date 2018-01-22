@@ -10,7 +10,7 @@ def tokenize(files, logger):
     i = 0
     size = len(files)
     for file in files:
-        if (i % 50 == 1):
+        if (i % 250 == 1):
             logger.info("Tokenization - "+str(i)+" over "+ str(size))
             logger.info("And now there is "+str(allWordsConnectedToFiles.__sizeof__())+" words")
         i = i+1
