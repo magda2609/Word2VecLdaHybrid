@@ -21,7 +21,7 @@ def loadFilenameWithSentences(fileName):
         lines = infile.readlines()
         for line in lines:
             vals = line.split('\t')
-            text.append(vals[1])
+            text.append([vals[1]])
             files.append(vals[0]+str(i))
             i = i+1
     return files, text
