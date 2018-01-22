@@ -11,6 +11,8 @@ from logger import Logger
 
 
 nltk.download("wordnet")
+nltk.download("stopwords")
+
 logger = Logger().get_logger("LDA_Word2Vec_hybrid")
 
 logger.info("Reading files")
@@ -54,7 +56,7 @@ logger.info(str(len(words_in_documents_test))+" words found")
 all_topics_test = lda_test(lda, words_in_documents_test)
 save_lda_document_distributions(all_topics_test, filenames_test, settings.lda_doc_results_test)
 
-doc_topic_choosen_test, doc_topic_max_test = choose_topic(extended_topics, words_in_documents_test, len(files), settings.topics, logger)
+doc_topic_choosen_test, doc_topic_max_test = choose_topic(extended_topics, words_in_documents_test, len(files_test), settings.topics, logger)
 logger.info("Saving document_topics_distributions:")
 save_and_calculate_topic_document_distribution(filenames_test, doc_topic_choosen_test, settings.all_output_choosen_test, settings.topics)
 save_and_calculate_topic_document_distribution(filenames_test, doc_topic_max_test, settings.all_output_max_test, settings.topics)

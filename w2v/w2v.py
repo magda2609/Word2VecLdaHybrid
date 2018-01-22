@@ -1,4 +1,5 @@
 from gensim.models.word2vec import Word2Vec
+from gensim.models import KeyedVectors
 
 from files.datasets.word2vec import getModelDirectory
 
@@ -24,7 +25,7 @@ def w2v_extend_topics(topics, number_of_words, w2v_similarity, logger):
 
 
 def readModel():
-    return Word2Vec.load_word2vec_format(getModelDirectory(), binary=True)
+    return KeyedVectors.load_word2vec_format(getModelDirectory(), binary=True)
 
 def get_similar_words(model, word, w2v_similarity, lda_word_probability):
     words = []

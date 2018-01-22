@@ -22,15 +22,13 @@ def tokenize(files, logger):
         sentences2 = []
         for line in sentences:
             for oneWord in line:
-                if (oneWord not in stopwords.words('english')):
-                    if (oneWord not in STOPWORDS):
-                        try:
-                            word = wordnet.synsets(oneWord)[0].lemmas()[0].name()
-                            if (word not in stopwords.words('english')):
-                                if (oneWord not in STOPWORDS):
-                                    sentences2.append(word.lower())
-                        except:
-                            a=None
+                try:
+                    word = wordnet.synsets(oneWord)[0].lemmas()[0].name()
+                    if (word not in stopwords.words('english')):
+                        if (oneWord not in STOPWORDS):
+                            sentences2.append(word.lower())
+                except:
+                    a=None
         # if (sentences2.__sizeof__() > 0):
         allWordsConnectedToFiles.append(sentences2)
     return allWordsConnectedToFiles

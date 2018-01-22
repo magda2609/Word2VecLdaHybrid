@@ -2,8 +2,8 @@ import os
 import re
 
 
-whereTrain = '/Users/magdalenas/Downloads/20news-bydate/20news-bydate-train/'
-whereTest = '/Users/magdalenas/Downloads/20news-bydate/20news-bydate-test/'
+whereTrain = './files/datasets/data/20news-bydate-train/'
+whereTest = './files/datasets/data/20news-bydate-test/'
 
 def getFilenames(isTrain = True):
     if (isTrain):

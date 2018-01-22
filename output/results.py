@@ -1,6 +1,7 @@
 import pyexcel
 import os
 import numpy
+from operator import itemgetter
 
 
 def sort_and_save_topics(topics_expElogbeta, dictionary, words, filename):
@@ -34,6 +35,12 @@ def save_word2vec_topics(extended_topics, w2v_output):
 
 
 def choose_topic(extended_topics, words_in_documents, files_count, topics_count, logger): #files?
+    myDict = [None] * topics_count
+    for i in range(0, topics_count):
+        myDict[i] = {}
+        for j in range(0, len(extended_topics[i])):
+            myDict[i][extended_topics[i][j][2]] = extended_topics[i][j][1]
+
     document_topic_choosen = [None] * files_count
     document_topic_max = [None] * files_count
     for i in range(0, files_count):
@@ -47,7 +54,7 @@ def choose_topic(extended_topics, words_in_documents, files_count, topics_count,
     for words_in_document in words_in_documents:
         logger.info("Choosing topic for document "+str(i)+" of "+str(files_count))
         for word in words_in_document:
-            distributions = find_distributions(word, extended_topics, topics_count)
+            distributions = find_distributions(word, myDict, topics_count)
             topic = choose_topic_with_distribution(distributions, topics_count)
             document_topic_choosen[i][topic] += 1
             document_topic_max[i][distributions.index(max(distributions))] += 1
@@ -59,14 +66,13 @@ def choose_topic(extended_topics, words_in_documents, files_count, topics_count,
 def choose_topic_with_distribution(distributions, topics_count):
     return numpy.random.choice(numpy.arange(0, topics_count), p=distributions)
 
-def find_distributions(word, extended_topics, topics_count):
+def find_distributions(word, myDict, topics_count):
     distributions = []
     for i in range(0, topics_count):
         distributions.append(0.000001)
     for i in range(0, topics_count):
-        for j in range(0, len(extended_topics[i])):
-            if (extended_topics[i][j][2] == word):
-                distributions[i] = extended_topics[i][j][1]
+        if (myDict[i].get(word,None) is not  None):
+            distributions[i] = myDict[i][word]
     normed = [i / sum(distributions) for i in distributions]
     return normed
 
@@ -89,11 +95,14 @@ def save_and_calculate_topic_document_distribution(files, doc_topic, output_file
 def save_lda_document_distributions(all_topics, filenames, output_file):
     data = []
     i = 0
-    for doc_topics in all_topics:
-        if (len(doc_topics) > 1):
-            data.append([filenames[i], (max(doc_topics, key=lambda x: x[1])[0])])
-        elif (len(doc_topics) == 1):
-            data.append([filenames[i], doc_topics[0][0]])
-        i = i+1
+    for all_docs in all_topics:
+        for doc_topics in all_docs[1]:
+            if (len(doc_topics) > 2):
+                newList = numpy.array(doc_topics)
+                print newList
+                data.append([filenames[i], (max(newList, key=itemgetter(1)))[0]])
+            elif (len(doc_topics) == 1):
+                data.append([filenames[i], doc_topics[0][0]])
+            i = i+1
 
     pyexcel.save_as(array=([['document', 'topic']]+data), dest_file_name=output_file)
