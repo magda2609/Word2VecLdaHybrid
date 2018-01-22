@@ -1,13 +1,14 @@
-from files.datasets import fifteenTypes, newsgroups20, webkb
+from files.datasets import fifteenTypes, newsgroups20, webkb, r8, r52
 
 LOG_LEVEL = "INFO"
 LOG_FILE = "./output/logging.log"
 
-filename_types = webkb
-folder = './output/webkb'
+filename_types = r8
+folder = './output/r8'
+loaded_together = True
 
 #train
-topics = 7
+topics = 8
 number_of_extended_words = 100
 w2v_similarity = 0.45
 lda_doc_results = folder+'/train_lda_doc_results.csv'

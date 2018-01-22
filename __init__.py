@@ -16,8 +16,11 @@ nltk.download("stopwords")
 logger = Logger().get_logger("LDA_Word2Vec_hybrid")
 
 logger.info("Reading files")
-filenames_train = settings.filename_types.getFilenames(isTrain=True)
-files = read_files(filenames = filenames_train)
+if (settings.loaded_together):
+    filenames_train, files = settings.filename_types.getFilenames(isTrain=True)
+else:
+    filenames_train = settings.filename_types.getFilenames(isTrain=True)
+    files = read_files(filenames = filenames_train)
 # files = read_wiki_files()
 logger.info(str(len(files))+" files found")
 
@@ -48,8 +51,11 @@ save_and_calculate_topic_document_distribution(filenames_train, doc_topic_max, s
 
 logger.info("Time to test")
 logger.info("Reading files")
-filenames_test = settings.filename_types.getFilenames(isTrain=False)
-files_test = read_files(filenames = filenames_test)
+if (settings.loaded_together):
+    filenames_test, files_test = settings.filename_types.getFilenames(isTrain=False)
+else:
+    filenames_test = settings.filename_types.getFilenames(isTrain=False)
+    files_test = read_files(filenames = filenames_test)
 logger.info("Tokenization process")
 words_in_documents_test = tokenize(files_test, logger)
 logger.info(str(len(words_in_documents_test))+" words found")
