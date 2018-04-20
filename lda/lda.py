@@ -11,8 +11,8 @@ def lda(words, topics):
 
     mm = ClippedCorpus(mm_corpus)
 
-    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=10, iterations=500)
 
+    lda = LdaModel(corpus=mm, id2word=dictionary, num_topics=topics, passes=20, iterations=500, alpha='auto')
     all_topics = lda.get_document_topics(corpus, per_word_topics=True)
 
     return lda, all_topics, lda.expElogbeta, dictionary

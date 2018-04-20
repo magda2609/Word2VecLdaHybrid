@@ -1,4 +1,4 @@
-from files.datasets import fifteenTypes, newsgroups20, webkb, r8, r52
+from files.datasets import fifteenTypes, thirtyTypes, newsgroups20, webkb, r8, r52
 
 LOG_LEVEL = "INFO"
 LOG_FILE = "./output/logging.log"
